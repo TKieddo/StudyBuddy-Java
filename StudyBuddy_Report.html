@@ -1,0 +1,794 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<title>Study Buddy AI — Student Lab Report</title><style>
+  * { box-sizing: border-box; }
+  html, body { background: #ffffff; }
+  body {
+    margin: 0; color: #1c1915; background: #ffffff;
+    font-family: Palatino, "Palatino Linotype", "Iowan Old Style", Georgia, serif;
+    font-size: 16.5px; line-height: 1.52;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 28px 18px 80px; background: #ffffff; }
+  section.sheet {
+    background: #ffffff; border-radius: 18px; padding: 36px 42px 28px; margin: 18px 0;
+    box-shadow: 0 10px 30px rgba(40, 32, 20, 0.06); border: 1px solid #ececec;
+  }
+  .kicker {
+    font-family: "Avenir Next", "Segoe UI", sans-serif; letter-spacing: 0.16em;
+    text-transform: uppercase; font-size: 12px; color: #2f6f68; margin: 0 0 6px;
+  }
+  h2 { font-size: 34px; font-weight: 500; margin: 0 0 6px; letter-spacing: -0.02em; }
+  h3 {
+    font-family: "Avenir Next", "Segoe UI", sans-serif; font-size: 12.5px;
+    letter-spacing: 0.12em; text-transform: uppercase; color: #1a4744;
+    margin: 18px 0 6px; font-weight: 600;
+  }
+  .deck { color: #5e584f; margin: 0 0 12px; }
+  p { margin: 0 0 10px; }
+  table { width: 100%; border-collapse: collapse; margin: 6px 0 12px; font-size: 14.5px; }
+  th, td { text-align: left; padding: 7px 9px; border-bottom: 1px solid #e6e6e6; vertical-align: top; }
+  th {
+    font-family: "Avenir Next", "Segoe UI", sans-serif; font-size: 11px;
+    letter-spacing: 0.08em; text-transform: uppercase; color: #5e584f; font-weight: 600;
+  }
+  /* Natural size: fill page width, keep aspect — no forced max-height shrink */
+  .figure svg { width: 100%; height: auto; display: block; }
+  .figure {
+    border: 2px solid #a6a6a6; border-radius: 14px; padding: 10px 12px 8px;
+    margin: 10px 0 12px; background: #ffffff;
+  }
+  .figure img {
+    display: block; width: 100%; height: auto; border-radius: 8px;
+    image-rendering: auto;
+  }
+  .figure.modal {
+    text-align: center;
+  }
+  .figure.modal img {
+    width: auto; max-width: 70%; height: auto; margin: 0 auto;
+  }
+  .cap { margin: 8px 0 0; color: #5e584f; font-size: 13.5px; }
+  .note { color: #5e584f; font-size: 13.5px; }
+  code {
+    font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    font-size: 0.86em; background: #f5f5f5; padding: 1px 5px; border-radius: 4px;
+  }
+  .window {
+    border-radius: 14px; overflow: hidden; margin: 10px 0 14px;
+    border: 2px solid #a6a6a6; background: #ffffff;
+  }
+  .bar {
+    display: flex; align-items: center; gap: 10px; padding: 7px 12px;
+    font-family: "Avenir Next", "Segoe UI", sans-serif; font-size: 12px;
+  }
+  .dots { display: flex; gap: 5px; }
+  .dots i { width: 8px; height: 8px; border-radius: 50%; display: block; background: #d7c4a4; }
+  .code .bar { background: #1a4744; color: #f6f1e7; }
+  .code .dots i { background: rgba(246,241,231,0.45); }
+  .code pre, .term pre {
+    margin: 0; padding: 12px 14px 14px; overflow-x: auto;
+    font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    font-size: 11px; line-height: 1.42; white-space: pre;
+  }
+  .code pre { background: #ffffff; color: #000000; counter-reset: line; }
+  .term .bar { background: #241f1a; color: #f6f1e7; }
+  .term .dots i:nth-child(1) { background: #c4553a; }
+  .term .dots i:nth-child(2) { background: #d2a15a; }
+  .term .dots i:nth-child(3) { background: #6f9a72; }
+  .term pre { background: #1c1915; color: #f3ecdf; }
+  .ln::before {
+    counter-increment: line; content: counter(line); display: inline-block;
+    width: 2.2em; margin-right: 0.7em; color: #b3a898; text-align: right; user-select: none;
+  }
+  .cm { color: #008000; } .kw { color: #0000ff; } .st { color: #a31515; }
+  ol.contents { padding-left: 0; list-style: none; margin: 6px 0 0; }
+  ol.contents li { border-top: 1px solid #e6e6e6; padding: 9px 0; font-size: 16px; }
+  ol.contents a { color: #1c1915; text-decoration: none; }
+  ol.contents .n {
+    font-family: "Avenir Next", "Segoe UI", sans-serif; color: #1a4744;
+    display: inline-block; width: 36px;
+  }
+  ul.plain { margin: 0 0 10px; padding-left: 1.2em; }
+  ul.plain li { margin: 4px 0; }
+  @page { size: A4; margin: 10mm 10mm 12mm 10mm; }
+  @media print {
+    html, body { background: #ffffff; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .wrap { max-width: none; padding: 0; }
+    section.sheet {
+      box-shadow: none; border: 0; border-radius: 0; padding: 0; margin: 0 0 4mm 0;
+      page-break-before: auto; break-before: auto;
+    }
+    section.sheet.page-start { page-break-before: always; break-before: page; }
+    h2 { font-size: 26px; }
+    .kicker, h2, .deck, h3 { page-break-after: avoid; break-after: avoid-page; }
+    table, .term.window { break-inside: avoid; page-break-inside: avoid; }
+    .figure {
+      break-inside: avoid; page-break-inside: avoid;
+      border: 2px solid #a6a6a6; border-radius: 14px;
+    }
+    /* Full printable width, natural aspect — do not clamp height */
+    .figure img {
+      width: 100% !important;
+      max-width: 100% !important;
+      height: auto !important;
+      max-height: none !important;
+    }
+    .figure.modal img {
+      width: auto !important;
+      max-width: 75% !important;
+      height: auto !important;
+      max-height: none !important;
+    }
+    .code.window {
+      break-inside: auto; page-break-inside: auto; overflow: visible;
+      border: 2px solid #a6a6a6; border-radius: 14px;
+      -webkit-box-decoration-break: clone; box-decoration-break: clone;
+    }
+    .code .bar { page-break-after: avoid; break-after: avoid-page; }
+    .code pre, .term pre {
+      overflow: visible; white-space: pre-wrap; overflow-wrap: anywhere;
+      word-break: break-word; font-size: 9.5px; line-height: 1.38;
+    }
+    a { text-decoration: none; }
+  }
+</style></head>
+<body><main class="wrap"><section class="sheet page-start" id="contents"><p class="kicker">Contents</p><h2>What is in this report</h2>
+<ol class="contents">
+  <li><span class="n">01</span><a href="#s1">What the program is</a></li>
+  <li><span class="n">01b</span><a href="#plan1">Planning — idea and vision</a></li>
+  <li><span class="n">01c</span><a href="#plan2">Planning — big picture flow</a></li>
+  <li><span class="n">01d</span><a href="#plan3">Planning — window layout</a></li>
+  <li><span class="n">01e</span><a href="#plan4">Planning — data outline</a></li>
+  <li><span class="n">01f</span><a href="#plan5">Planning — user journey</a></li>
+  <li><span class="n">01g</span><a href="#plan6">Planning — what I needed</a></li>
+  <li><span class="n">01h</span><a href="#plan7">Planning — limits I accepted</a></li>
+  <li><span class="n">01i</span><a href="#plan8">Planning — build order</a></li>
+  <li><span class="n">02</span><a href="#s2">What I did + how to run</a></li>
+  <li><span class="n">03</span><a href="#s3">Overview (with screenshot)</a></li>
+  <li><span class="n">04</span><a href="#s4">Subjects and documents</a></li>
+  <li><span class="n">05</span><a href="#s5">Summary</a></li>
+  <li><span class="n">06</span><a href="#s6">Quiz</a></li>
+  <li><span class="n">07</span><a href="#s7">Flashcards</a></li>
+  <li><span class="n">08</span><a href="#s8">Schedule</a></li>
+  <li><span class="n">09</span><a href="#s9">Add subject + Ask</a></li>
+  <li><span class="n">10</span><a href="#s10">Classes and save/load</a></li>
+  <li><span class="n">11</span><a href="#s11">FileImport and AI methods</a></li>
+  <li><span class="n">12</span><a href="#s12">Problems, help, analysis</a></li>
+  <li><span class="n">13</span><a href="#s13">Conclusion</a></li>
+  <li><span class="n">14</span><a href="#src">Important code (with short notes)</a></li>
+</ol>
+<p class="note">Each screenshot sits with the section it belongs to. Images use full page width and their real aspect ratio (not forced small).</p>
+</section>
+<section class="sheet page-start" id="s1"><p class="kicker">Part 1</p><h2>What the program is</h2>
+<p class="deck">Study Buddy AI is a desktop Java program I chose myself as my final project for this Java class.</p>
+<h3>Why I chose this</h3>
+<p>For the final project we could choose our own program. I chose Study Buddy myself. I wanted a study helper I would actually use: take my course notes (PDF or image), turn them into something I can revise with, and show it in a normal window — not only text in the terminal.</p>
+<h3>What the finished program does</h3>
+<ul class="plain">
+  <li>Add a subject (for example Java or Assembly Language)</li>
+  <li>Import a PDF or image under that subject</li>
+  <li>AI builds a study pack: summary, quiz (≥6), flashcards (≥6), 7-day plan</li>
+  <li>Practise with Quiz and Flashcards</li>
+  <li>Schedule shows today across subjects</li>
+  <li>Ask answers questions about the open document</li>
+  <li>Scores and subjects save under <code>data/</code></li>
+</ul>
+<table>
+  <tr><th>Tool</th><th>What it is for</th></tr>
+  <tr><td>Java 17 + Swing</td><td>Window, buttons, panels, clicks</td></tr>
+  <tr><td>Apache PDFBox</td><td>Read PDF text</td></tr>
+  <tr><td>Token Plan API</td><td>Study packs + Ask (qwen3.8-flash)</td></tr>
+  <tr><td>Plain text files</td><td>Save without a database</td></tr>
+</table>
+</section>
+
+<section class="sheet page-start" id="plan1">
+<p class="kicker">Part 1 — Planning</p>
+<h2>Idea and vision (before coding)</h2>
+<p class="deck">This part is the planning stage — what I drew out and decided before I wrote the real Swing code.</p>
+<h3>The problem I wanted to solve</h3>
+<p>I have lecture PDFs and slides for more than one subject. Opening them in a viewer only lets me read. I wanted one small desktop app where I can keep subjects separate, turn a file into practise material, and come back later without losing progress.</p>
+<h3>Vision in one sentence</h3>
+<p>A calm study dashboard: pick a subject → drop in notes → get summary / quiz / cards / plan → practise and ask questions → everything saved on my computer.</p>
+<h3>What success looked like in my head</h3>
+<ul class="plain">
+  <li>Looks like a real window app, not a console menu loop</li>
+  <li>Works for Java and also other subjects (not Java-only)</li>
+  <li>I can revise with quiz and flashcards from my own files</li>
+  <li>If I close the app, my subjects and scores are still there next time</li>
+</ul>
+<p class="note">The pages after this show the outline diagrams I used to plan the flow, layout, data, and limits — before Part 2 (building and running).</p>
+</section>
+
+<section class="sheet page-start" id="plan2">
+<p class="kicker">Part 1 — Planning</p>
+<h2>Big picture flow</h2>
+<p class="deck">First sketch: how information should move through the app.</p>
+<div class="figure">
+<svg viewBox="0 0 720 420" xmlns="http://www.w3.org/2000/svg" role="img">
+<defs>
+  <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+    <path d="M0,0 L6,3 L0,6 Z" fill="#1a4744"/>
+  </marker>
+</defs>
+<rect x="40" y="40" width="140" height="56" rx="12" fill="#e8f5f2" stroke="#1a4744" stroke-width="2"/>
+<text x="110" y="74" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="14" font-weight="600" fill="#1c1915">PDF / image</text>
+<line x1="180" y1="68" x2="250" y2="68" stroke="#1a4744" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="250" y="40" width="150" height="56" rx="12" fill="#fff4e8" stroke="#1a4744" stroke-width="2"/>
+<text x="325" y="74" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="14" font-weight="600" fill="#1c1915">Read file</text>
+<line x1="400" y1="68" x2="470" y2="68" stroke="#1a4744" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="470" y="40" width="180" height="56" rx="12" fill="#eee8ff" stroke="#1a4744" stroke-width="2"/>
+<text x="560" y="74" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="14" font-weight="600" fill="#1c1915">AI study pack</text>
+<line x1="560" y1="96" x2="560" y2="150" stroke="#1a4744" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="250" y="150" width="430" height="70" rx="12" fill="#f5f5f7" stroke="#1a4744" stroke-width="2"/>
+<text x="465" y="180" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="13" font-weight="600" fill="#1c1915">Summary  ·  Quiz  ·  Cards  ·  7-day plan</text>
+<text x="465" y="202" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="12" font-weight="500" fill="#5e584f">(kept under a subject)</text>
+<line x1="350" y1="220" x2="350" y2="270" stroke="#1a4744" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="465" y1="220" x2="465" y2="270" stroke="#1a4744" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="580" y1="220" x2="580" y2="270" stroke="#1a4744" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="250" y="270" width="140" height="56" rx="12" fill="#e8f0ff" stroke="#1a4744" stroke-width="2"/>
+<text x="320" y="304" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="14" font-weight="600" fill="#1c1915">Practise</text>
+<rect x="410" y="270" width="140" height="56" rx="12" fill="#ffe8f0" stroke="#1a4744" stroke-width="2"/>
+<text x="480" y="304" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="14" font-weight="600" fill="#1c1915">Schedule</text>
+<rect x="570" y="270" width="140" height="56" rx="12" fill="#e8ffe8" stroke="#1a4744" stroke-width="2"/>
+<text x="640" y="304" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="14" font-weight="600" fill="#1c1915">Ask</text>
+<line x1="320" y1="326" x2="320" y2="370" stroke="#1a4744" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="220" y="370" width="200" height="40" rx="12" fill="#fff" stroke="#1a4744" stroke-width="2"/>
+<text x="320" y="396" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="13" font-weight="600" fill="#1c1915">Save in data/ folder</text>
+</svg>
+<p class="cap">Figure (planning): file → read → AI pack → practise / schedule / Ask → save in data/.</p>
+</div>
+<p>I planned the middle “study pack” as the heart of the app. The window only displays that pack in different ways (summary page, quiz page, cards page, schedule page, Ask).</p>
+</section>
+
+<section class="sheet page-start" id="plan3">
+<p class="kicker">Part 1 — Planning</p>
+<h2>Window layout outline</h2>
+<p class="deck">I wanted three columns so navigation, study tools, and Ask do not fight for the same space.</p>
+<div class="figure">
+<svg viewBox="0 0 720 380" xmlns="http://www.w3.org/2000/svg" role="img">
+<rect x="20" y="20" width="680" height="340" rx="18" fill="#f2f2f5" stroke="#a6a6a6" stroke-width="2"/>
+<rect x="36" y="40" width="120" height="300" rx="14" fill="#fafafa" stroke="#c8c8d0" stroke-width="2"/>
+<text x="96" y="70" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="13" font-weight="600" fill="#1c1915">Sidebar</text>
+<text x="96" y="100" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="12" font-weight="500" fill="#5e584f">Overview</text>
+<text x="96" y="124" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="12" font-weight="500" fill="#5e584f">Courses</text>
+<text x="96" y="148" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="12" font-weight="500" fill="#5e584f">My docs</text>
+<text x="96" y="172" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="12" font-weight="500" fill="#5e584f">Quiz</text>
+<text x="96" y="196" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="12" font-weight="500" fill="#5e584f">Cards</text>
+<text x="96" y="220" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="12" font-weight="500" fill="#5e584f">Schedule</text>
+<rect x="50" y="300" width="92" height="28" rx="10" fill="#f3e8ff" stroke="#b080e0" stroke-width="2"/>
+<text x="96" y="319" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="11" font-weight="600" fill="#5a2a8a">+ Subject</text>
+<rect x="170" y="40" width="340" height="300" rx="14" fill="#ffffff" stroke="#c8c8d0" stroke-width="2"/>
+<text x="340" y="75" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="14" font-weight="600" fill="#1c1915">Main pages</text>
+<text x="340" y="105" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="12" font-weight="500" fill="#5e584f">Subject cards / docs / tools</text>
+<rect x="190" y="130" width="140" height="70" rx="12" fill="#ffe8d8" stroke="#e09060" stroke-width="2"/>
+<text x="260" y="170" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="13" font-weight="600" fill="#1c1915">Java</text>
+<rect x="350" y="130" width="140" height="70" rx="12" fill="#e0ecff" stroke="#6080e0" stroke-width="2"/>
+<text x="420" y="170" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="13" font-weight="600" fill="#1c1915">Assembly</text>
+<rect x="190" y="220" width="300" height="90" rx="12" fill="#f8f8fa" stroke="#d0d0d8" stroke-width="2"/>
+<text x="340" y="270" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="12" font-weight="500" fill="#5e584f">Open document tools</text>
+<rect x="526" y="40" width="158" height="300" rx="14" fill="#ffffff" stroke="#c8c8d0" stroke-width="2"/>
+<text x="605" y="75" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="13" font-weight="600" fill="#1c1915">Profile</text>
+<rect x="542" y="95" width="126" height="70" rx="10" fill="#f5f5f7" stroke="#d0d0d8" stroke-width="2"/>
+<text x="605" y="135" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="12" font-weight="500" fill="#5e584f">Stats</text>
+<rect x="542" y="185" width="126" height="140" rx="10" fill="#f8f0ff" stroke="#c8a0e8" stroke-width="2"/>
+<text x="605" y="255" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="13" font-weight="600" fill="#1c1915">Ask</text>
+<text x="605" y="278" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="11" font-weight="500" fill="#5e584f">chat here</text>
+</svg>
+<p class="cap">Figure (planning): wireframe — sidebar | main pages | profile + Ask.</p>
+</div>
+<table>
+  <tr><th>Area</th><th>What I planned it for</th></tr>
+  <tr><td>Left</td><td>Move between Overview, subjects, docs, quiz, cards, schedule; add a subject</td></tr>
+  <tr><td>Centre</td><td>The page I am working on (cards, quiz, summary, …)</td></tr>
+  <tr><td>Right</td><td>My name/stats + Ask about the open document</td></tr>
+</table>
+</section>
+
+<section class="sheet page-start" id="plan4">
+<p class="kicker">Part 1 — Planning</p>
+<h2>Data outline</h2>
+<p class="deck">How I planned to organise information (still just boxes — not code yet).</p>
+<div class="figure">
+<svg viewBox="0 0 720 360" xmlns="http://www.w3.org/2000/svg" role="img">
+<defs>
+  <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+    <path d="M0,0 L6,3 L0,6 Z" fill="#1a4744"/>
+  </marker>
+</defs>
+<rect x="260" y="20" width="200" height="50" rx="12" fill="#e8f5f2" stroke="#1a4744" stroke-width="2"/>
+<text x="360" y="50" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="14" font-weight="600" fill="#1c1915">Subject (Course)</text>
+<line x1="360" y1="70" x2="360" y2="105" stroke="#1a4744" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="80" y="110" width="200" height="50" rx="12" fill="#fff4e8" stroke="#1a4744" stroke-width="2"/>
+<text x="180" y="140" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="14" font-weight="600" fill="#1c1915">Document A</text>
+<rect x="440" y="110" width="200" height="50" rx="12" fill="#fff4e8" stroke="#1a4744" stroke-width="2"/>
+<text x="540" y="140" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="14" font-weight="600" fill="#1c1915">Document B</text>
+<line x1="180" y1="160" x2="180" y2="195" stroke="#1a4744" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="540" y1="160" x2="540" y2="195" stroke="#1a4744" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="40" y="200" width="280" height="140" rx="12" fill="#f5f5f7" stroke="#1a4744" stroke-width="2"/>
+<text x="180" y="230" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="14" font-weight="600" fill="#1c1915">Study pack</text>
+<text x="180" y="258" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="12" font-weight="500" fill="#5e584f">• summary</text>
+<text x="180" y="278" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="12" font-weight="500" fill="#5e584f">• quiz questions</text>
+<text x="180" y="298" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="12" font-weight="500" fill="#5e584f">• flashcards</text>
+<text x="180" y="318" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="12" font-weight="500" fill="#5e584f">• 7-day plan</text>
+<rect x="400" y="200" width="280" height="140" rx="12" fill="#f5f5f7" stroke="#1a4744" stroke-width="2"/>
+<text x="540" y="230" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="14" font-weight="600" fill="#1c1915">Study pack</text>
+<text x="540" y="258" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="12" font-weight="500" fill="#5e584f">• summary</text>
+<text x="540" y="278" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="12" font-weight="500" fill="#5e584f">• quiz questions</text>
+<text x="540" y="298" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="12" font-weight="500" fill="#5e584f">• flashcards</text>
+<text x="540" y="318" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="12" font-weight="500" fill="#5e584f">• 7-day plan</text>
+</svg>
+<p class="cap">Figure (planning): one subject can have many documents; each document has one study pack.</p>
+</div>
+<p>This outline later became the classes <code>Course</code>, <code>StudyDoc</code>, and <code>StudyPack</code>. Planning it first helped me avoid mixing “subject” and “one PDF” into one messy object.</p>
+<ul class="plain">
+  <li><b>Subject</b> = folder for a course name (Java, Assembly, …)</li>
+  <li><b>Document</b> = one imported PDF or image</li>
+  <li><b>Pack</b> = summary + quiz + cards + plan for that document</li>
+</ul>
+</section>
+
+<section class="sheet page-start" id="plan5">
+<p class="kicker">Part 1 — Planning</p>
+<h2>User journey I planned</h2>
+<p class="deck">The path a student (me) should be able to follow on day one.</p>
+<div class="figure">
+<svg viewBox="0 0 720 460" xmlns="http://www.w3.org/2000/svg" role="img">
+<defs>
+  <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+    <path d="M0,0 L6,3 L0,6 Z" fill="#1a4744"/>
+  </marker>
+</defs>
+<rect x="40" y="30" width="160" height="48" rx="12" fill="#e8f5f2" stroke="#1a4744" stroke-width="2"/>
+<text x="120" y="60" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="13" font-weight="600" fill="#1c1915">1. Add subject</text>
+<line x1="200" y1="54" x2="260" y2="54" stroke="#1a4744" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="260" y="30" width="180" height="48" rx="12" fill="#fff4e8" stroke="#1a4744" stroke-width="2"/>
+<text x="350" y="60" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="13" font-weight="600" fill="#1c1915">2. Import PDF</text>
+<line x1="440" y1="54" x2="500" y2="54" stroke="#1a4744" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="500" y="30" width="180" height="48" rx="12" fill="#eee8ff" stroke="#1a4744" stroke-width="2"/>
+<text x="590" y="60" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="13" font-weight="600" fill="#1c1915">3. Wait for pack</text>
+<line x1="590" y1="78" x2="590" y2="120" stroke="#1a4744" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="470" y="120" width="240" height="48" rx="12" fill="#f5f5f7" stroke="#1a4744" stroke-width="2"/>
+<text x="590" y="150" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="13" font-weight="600" fill="#1c1915">4. Read summary</text>
+<line x1="470" y1="144" x2="350" y2="144" stroke="#1a4744" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="200" y="120" width="200" height="48" rx="12" fill="#e8f0ff" stroke="#1a4744" stroke-width="2"/>
+<text x="300" y="150" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="13" font-weight="600" fill="#1c1915">5. Do quiz / cards</text>
+<line x1="300" y1="168" x2="300" y2="210" stroke="#1a4744" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="200" y="210" width="200" height="48" rx="12" fill="#ffe8f0" stroke="#1a4744" stroke-width="2"/>
+<text x="300" y="240" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="13" font-weight="600" fill="#1c1915">6. Check schedule</text>
+<line x1="400" y1="234" x2="500" y2="234" stroke="#1a4744" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="500" y="210" width="180" height="48" rx="12" fill="#e8ffe8" stroke="#1a4744" stroke-width="2"/>
+<text x="590" y="240" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="13" font-weight="600" fill="#1c1915">7. Ask a question</text>
+<line x1="300" y1="258" x2="300" y2="300" stroke="#1a4744" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="180" y="300" width="240" height="48" rx="12" fill="#ffffff" stroke="#1a4744" stroke-width="2"/>
+<text x="300" y="330" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="13" font-weight="600" fill="#1c1915">8. Close & reopen</text>
+<line x1="300" y1="348" x2="300" y2="385" stroke="#1a4744" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="140" y="385" width="320" height="48" rx="12" fill="#e8f5f2" stroke="#1a4744" stroke-width="2"/>
+<text x="300" y="415" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="13" font-weight="600" fill="#1c1915">Subjects + scores still there</text>
+</svg>
+<p class="cap">Figure (planning): step-by-step journey from add subject to saved progress.</p>
+</div>
+<p>Step 8 mattered a lot in planning: if closing the app wiped everything, the project would feel unfinished even if the quiz looked nice.</p>
+</section>
+
+<section class="sheet page-start" id="plan6">
+<p class="kicker">Part 1 — Planning</p>
+<h2>What I needed (building blocks)</h2>
+<p class="deck">Things I listed before coding so I knew what to learn or bring in.</p>
+<table>
+  <tr><th>Need</th><th>Why (planning note)</th><th>What I expected to use</th></tr>
+  <tr><td>Desktop window + buttons</td><td>Dashboard, not console only</td><td>Java Swing</td></tr>
+  <tr><td>Read PDF text</td><td>Notes come as PDFs from class</td><td>A PDF library (PDFBox)</td></tr>
+  <tr><td>Optional image notes</td><td>Some slides are pictures</td><td>Send image to a vision-capable model</td></tr>
+  <tr><td>Turn notes into quiz/cards</td><td>Too slow to type by hand every time</td><td>Chat API (Token Plan / Qwen)</td></tr>
+  <tr><td>Keep data after close</td><td>Real study use</td><td>Simple files under a data folder</td></tr>
+  <tr><td>Classes from our course</td><td>Stay at beginner level where I can</td><td>Fields, constructors, methods, arrays, loops</td></tr>
+</table>
+<h3>What I deliberately did not plan</h3>
+<ul class="plain">
+  <li>No login website / online account system</li>
+  <li>No phone app</li>
+  <li>No shared class database — only my local folder</li>
+</ul>
+</section>
+
+<section class="sheet page-start" id="plan7">
+<p class="kicker">Part 1 — Planning</p>
+<h2>Limits I accepted early</h2>
+<p class="deck">Planning also means writing down what the first version will not try to do.</p>
+<table>
+  <tr><th>Limit</th><th>Why I accepted it</th></tr>
+  <tr><td>Needs internet + API key for import and Ask</td><td>I wanted real study content from my PDFs; hand-writing every quiz was not the goal</td></tr>
+  <tr><td>Very long PDFs may be cut</td><td>Keep requests smaller and the app responsive</td></tr>
+  <tr><td>AI reply must follow a fixed text format</td><td>So my beginner parser can find Q:/A:/W: lines with loops</td></tr>
+  <tr><td>One local profile on this computer</td><td>Enough for a class final project</td></tr>
+  <tr><td>UI polish second, structure first</td><td>Working flow mattered more than perfect looks on day one</td></tr>
+</table>
+<p>Writing these limits down helped me stop adding random features during coding. Later sections show what I actually built; this page is only the plan.</p>
+</section>
+
+<section class="sheet page-start" id="plan8">
+<p class="kicker">Part 1 — Planning</p>
+<h2>Build order I planned</h2>
+<p class="deck">Order of work I wrote before opening the editor for the big window.</p>
+<ol>
+  <li><b>Data shapes</b> — subject / document / pack (so I know what to save)</li>
+  <li><b>Save &amp; load</b> — plain files, so progress can survive a restart</li>
+  <li><b>Read PDF / image</b> — get raw material into the program</li>
+  <li><b>AI → pack</b> — turn material into summary, quiz, cards, plan</li>
+  <li><b>Window shell</b> — three columns and page switching</li>
+  <li><b>Tools</b> — quiz, cards, schedule, Ask on top of a loaded pack</li>
+  <li><b>Polish</b> — file picker, progress while waiting, colours, bug fixes</li>
+</ol>
+<div class="figure">
+<svg viewBox="0 0 720 160" xmlns="http://www.w3.org/2000/svg" role="img">
+<defs>
+  <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+    <path d="M0,0 L6,3 L0,6 Z" fill="#1a4744"/>
+  </marker>
+</defs>
+<rect x="20" y="50" width="85" height="50" rx="10" fill="#e8f5f2" stroke="#1a4744" stroke-width="2"/>
+<text x="62" y="80" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="12" font-weight="600" fill="#1c1915">Data</text>
+<line x1="105" y1="75" x2="130" y2="75" stroke="#1a4744" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="130" y="50" width="85" height="50" rx="10" fill="#fff4e8" stroke="#1a4744" stroke-width="2"/>
+<text x="172" y="80" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="12" font-weight="600" fill="#1c1915">Save</text>
+<line x1="215" y1="75" x2="240" y2="75" stroke="#1a4744" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="240" y="50" width="85" height="50" rx="10" fill="#eee8ff" stroke="#1a4744" stroke-width="2"/>
+<text x="282" y="80" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="12" font-weight="600" fill="#1c1915">Files</text>
+<line x1="325" y1="75" x2="350" y2="75" stroke="#1a4744" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="350" y="50" width="85" height="50" rx="10" fill="#e8f0ff" stroke="#1a4744" stroke-width="2"/>
+<text x="392" y="80" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="12" font-weight="600" fill="#1c1915">AI</text>
+<line x1="435" y1="75" x2="460" y2="75" stroke="#1a4744" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="460" y="50" width="85" height="50" rx="10" fill="#ffe8f0" stroke="#1a4744" stroke-width="2"/>
+<text x="502" y="80" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="12" font-weight="600" fill="#1c1915">Window</text>
+<line x1="545" y1="75" x2="570" y2="75" stroke="#1a4744" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="570" y="50" width="120" height="50" rx="10" fill="#e8ffe8" stroke="#1a4744" stroke-width="2"/>
+<text x="630" y="80" text-anchor="middle" font-family="Avenir Next, Segoe UI, sans-serif" font-size="12" font-weight="600" fill="#1c1915">Tools + polish</text>
+</svg>
+<p class="cap">Figure (planning): build order from data shapes to tools.</p>
+</div>
+<p>Part 2 onwards is what I actually implemented and how to run it. The planning pages stop here on purpose so they stay separate from the build story.</p>
+</section>
+<section class="sheet page-start" id="s2"><p class="kicker">Part 2</p><h2>What I did and how to run</h2>
+<p class="deck">I built it in steps: models → save/load → file import → AI → Swing UI → bug fixes.</p>
+<ol>
+  <li>Model classes: Course, StudyDoc, StudyPack, QuizQuestion, FlashCard, PlanItem, UserProfile</li>
+  <li>LibraryStore for the data folder</li>
+  <li>FileImport for PDF text / image base64</li>
+  <li>AiService for API + parsing</li>
+  <li>StudyBuddyApp + UiKit for the dashboard</li>
+  <li>Tested with real Java-topic PDFs and fixed picker, bubbles, quiz stats, API URL</li>
+</ol>
+<div class="window term"><div class="bar"><span class="dots"><i></i><i></i><i></i></span>Terminal</div><pre>cd "/Users/tsebisotuke/Documents/JAVA Class/StudyBuddy"
+javac -cp "lib/pdfbox-app.jar:." *.java
+java -cp "lib/pdfbox-app.jar:." StudyBuddyApp
+
+StudyBuddy: API ready (qwen3.8-flash) from .../config.properties</pre></div>
+<div class="window term"><div class="bar"><span class="dots"><i></i><i></i><i></i></span>data/courses.list</div><pre>java|Java|IT Courses
+assmbly-language|Assmbly Language|IT Courses</pre></div>
+<div class="window term"><div class="bar"><span class="dots"><i></i><i></i><i></i></span>data/profile.txt</div><pre>name=Tsebiso
+role=CS student
+quizzesTaken=1
+cardsFlipped=8
+bestPercent=20
+coursesCompleted=1</pre></div>
+</section>
+<section class="sheet page-start" id="s3"><p class="kicker">Part 3</p><h2>Overview page</h2>
+<p class="deck">First screen after launch. Sidebar on the left, course cards in the centre, profile + Ask on the right.</p>
+<h3>What I did here</h3>
+<ul class="plain">
+  <li><code>buildOverviewPage</code> / <code>refreshOverview</code> draw the greeting and course cards</li>
+  <li><code>courseCard</code> paints a coloured card per subject (name, doc count)</li>
+  <li>Category chips filter All Courses / IT Courses / Other</li>
+  <li>Profile panel shows quizzes done, card flips, best percent from <code>UserProfile</code></li>
+</ul>
+<p>Screenshot below is the full window at natural size (2× capture so text stays clearer when printed).</p>
+</section>
+<section class="sheet page-start" id="f1"><p class="kicker">Screenshot</p><h2>Overview</h2><div class="figure"><img src="report-screenshots/r01-overview.png" alt=""><p class="cap">Figure: Overview — greeting, Java + Assembly cards, profile stats, Ask panel.</p></div></section>
+<section class="sheet page-start" id="s4"><p class="kicker">Part 4</p><h2>Subjects and documents</h2>
+<p class="deck">Each subject is a Course. Documents under it are StudyDocs with their own study pack.</p>
+<h3>What I did</h3>
+<ul class="plain">
+  <li><code>showPage("course")</code> + <code>refreshCoursePage</code> list docs for the open subject</li>
+  <li><code>docRow</code> shows title, quiz/card counts, Open / Quiz / Cards</li>
+  <li>Scan PDF / Scan image call <code>importIntoSelected</code></li>
+  <li>My docs page lists everything across subjects via <code>refreshAllDocs</code></li>
+</ul>
+</section>
+<section class="sheet page-start" id="f2"><p class="kicker">Screenshot</p><h2>Java subject page</h2><div class="figure"><img src="report-screenshots/r02-course.png" alt=""><p class="cap">Figure: Java subject — 2 PDFs, Scan PDF / Scan image, Open / Quiz / Cards.</p></div></section>
+<section class="sheet page-start" id="f3"><p class="kicker">Screenshot</p><h2>My docs</h2><div class="figure"><img src="report-screenshots/r03-docs.png" alt=""><p class="cap">Figure: My docs — documents from the library in one list.</p></div></section>
+<section class="sheet page-start" id="s5"><p class="kicker">Part 5</p><h2>Summary</h2>
+<p class="deck">After import, the summary tab shows the AI text for the open document.</p>
+<ul class="plain">
+  <li><code>loadDocIntoViews</code> pushes the pack into the summary panel</li>
+  <li><code>summaryToHtml</code> turns OVERVIEW / KEY POINTS / REMEMBER into readable HTML</li>
+</ul>
+</section>
+<section class="sheet page-start" id="f4"><p class="kicker">Screenshot</p><h2>Summary</h2><div class="figure"><img src="report-screenshots/r04-summary.png" alt=""><p class="cap">Figure: Summary tab for Java-topic1_Introduction.pdf.</p></div></section>
+<section class="sheet page-start" id="s6"><p class="kicker">Part 6</p><h2>Quiz — what the methods do</h2>
+<p class="deck">Quiz uses the QuizQuestion array inside the open StudyPack.</p>
+<table>
+  <tr><th>Method</th><th>What it does</th></tr>
+  <tr><td><code>showQuestion()</code></td><td>Progress text, question, four shuffled options with colours</td></tr>
+  <tr><td><code>checkAnswer(index)</code></td><td>Green on correct, red on wrong pick, update score text</td></tr>
+  <tr><td><code>finishQuizIfNeeded()</code></td><td>Calls store.recordQuiz once on the last answer, then refresh profile</td></tr>
+  <tr><td><code>nextQuestion()</code></td><td>Moves to the next index, or restarts after the end</td></tr>
+</table>
+<p>Stats update when the quiz is finished — not after every mid-quiz click.</p>
+</section>
+<section class="sheet page-start" id="f5"><p class="kicker">Screenshot</p><h2>Quiz</h2><div class="figure"><img src="report-screenshots/r05-quiz.png" alt=""><p class="cap">Figure: Quiz — coloured option pills, Q progress, Next question.</p></div></section>
+<section class="sheet page-start" id="s7"><p class="kicker">Part 7</p><h2>Flashcards</h2>
+<p class="deck">Flashcards use the FlashCard array (front / back).</p>
+<table>
+  <tr><th>Method / action</th><th>What it does</th></tr>
+  <tr><td><code>showCard()</code></td><td>Shows front or back on the big card</td></tr>
+  <tr><td>Click card</td><td>Flips the face; can call recordCardFlip</td></tr>
+  <tr><td>Prev / Next</td><td>Change card index and call showCard again</td></tr>
+</table>
+</section>
+<section class="sheet page-start" id="f6"><p class="kicker">Screenshot</p><h2>Flashcards</h2><div class="figure"><img src="report-screenshots/r06-cards.png" alt=""><p class="cap">Figure: Flashcards page for the open document.</p></div></section>
+<section class="sheet page-start" id="s8"><p class="kicker">Part 8</p><h2>Schedule</h2>
+<p class="deck">Schedule reads PlanItem lists from saved packs.</p>
+<ul class="plain">
+  <li><code>refreshPlanCalendar()</code> builds Today (all subjects) + week for the open doc</li>
+  <li><code>timelineRow</code> / <code>planDayRow</code> draw coloured day cards</li>
+  <li><code>editOwnPlan()</code> lets me edit tasks without calling the AI again</li>
+</ul>
+</section>
+<section class="sheet page-start" id="f7"><p class="kicker">Screenshot</p><h2>Schedule</h2><div class="figure"><img src="report-screenshots/r07-schedule.png" alt=""><p class="cap">Figure: Schedule — Today across subjects + week for the open PDF.</p></div></section>
+<section class="sheet page-start" id="s9"><p class="kicker">Part 9</p><h2>Add subject and Ask</h2>
+<p class="deck">New subjects and the chat panel on the right.</p>
+<h3>Add subject</h3>
+<ul class="plain">
+  <li><code>addSubjectDialog()</code> opens a ModalSheet with name + category pills</li>
+  <li>On Create, <code>store.addCourse</code> writes a new folder under data/courses/</li>
+</ul>
+<h3>Ask</h3>
+<ul class="plain">
+  <li>Grey bubble = me, purple = assistant</li>
+  <li>Context label shows the open subject/document</li>
+  <li><code>AiService.ask</code> keeps greetings short and does not force Java unless I ask</li>
+</ul>
+</section>
+<section class="sheet page-start" id="f8"><p class="kicker">Screenshot</p><h2>Add subject</h2><div class="figure modal"><img src="report-screenshots/r08-add-subject.png" alt=""><p class="cap">Figure: Add subject sheet — name, IT Courses / Other, Create subject.</p></div></section>
+<section class="sheet page-start" id="s10"><p class="kicker">Part 10</p><h2>Classes and LibraryStore</h2>
+<p class="deck">Small classes, one idea each.</p>
+<table>
+  <tr><th>Class</th><th>Stores</th><th>Useful bit</th></tr>
+  <tr><td>Course</td><td>id, name, category, docs</td><td>docCount()</td></tr>
+  <tr><td>StudyDoc</td><td>title, source, pack, scores</td><td>questionCount / cardCount</td></tr>
+  <tr><td>StudyPack</td><td>summary, quiz[], cards[], plan[]</td><td>Built by AiService</td></tr>
+  <tr><td>QuizQuestion / FlashCard / PlanItem</td><td>One question, card, or day</td><td>Used by UI methods</td></tr>
+  <tr><td>UserProfile</td><td>name, role, totals</td><td>Right panel stats</td></tr>
+</table>
+<h3>LibraryStore methods</h3>
+<table>
+  <tr><th>Method</th><th>What it does</th></tr>
+  <tr><td>addCourse / addDoc</td><td>Add then saveAll</td></tr>
+  <tr><td>recordQuiz / recordCardFlip</td><td>Update scores / flips and save</td></tr>
+  <tr><td>saveAll / saveDoc / loadAll</td><td>Write and read plain text under data/</td></tr>
+</table>
+</section>
+<section class="sheet page-start" id="s11"><p class="kicker">Part 11</p><h2>FileImport and AiService methods</h2>
+<table>
+  <tr><th>FileImport</th><th>Job</th></tr>
+  <tr><td>readPdfText</td><td>PDFBox text; cut ~12,000 chars</td></tr>
+  <tr><td>imageBase64 / imageMime</td><td>Prepare image for vision API</td></tr>
+  <tr><td>isPdf / isImage</td><td>Check file ending</td></tr>
+</table>
+<table>
+  <tr><th>AiService</th><th>Job</th></tr>
+  <tr><td>loadConfig</td><td>Read key, URL, model from config.properties</td></tr>
+  <tr><td>buildFromText / buildFromImage</td><td>Ask for a study pack then parsePack</td></tr>
+  <tr><td>studyPrompt</td><td>Exact ===SUMMARY=== / QUIZ / CARDS / PLAN format</td></tr>
+  <tr><td>parseQuiz / parseCards / parsePlan</td><td>Loops on Q:/A:/W: and F:/B: lines</td></tr>
+  <tr><td>ask</td><td>Chat reply with open-doc context</td></tr>
+</table>
+<p>Main window helpers: <code>showPage</code>, <code>importIntoSelected</code> (SwingWorker + WorkingSheet), <code>pickStudyFile</code> (native FileDialog).</p>
+</section>
+<section class="sheet page-start" id="s12"><p class="kicker">Part 12</p><h2>Problems, help, analysis</h2>
+<table>
+  <tr><th>Problem</th><th>Fix</th></tr>
+  <tr><td>Ask bubbles clipped</td><td>Cap bubble width</td></tr>
+  <tr><td>JFileChooser ugly</td><td>Native FileDialog</td></tr>
+  <tr><td>Import no feedback</td><td>WorkingSheet progress</td></tr>
+  <tr><td>Quiz PillButton cast crash</td><td>PillButton[] for options</td></tr>
+  <tr><td>Stats timing confusing</td><td>Record on last answer / finish</td></tr>
+  <tr><td>API 401 / 404</td><td>Token Plan URL + qwen3.8-flash</td></tr>
+  <tr><td>Ask always Java</td><td>Short greeting prompt</td></tr>
+</table>
+<h3>Help</h3>
+<ul class="plain">
+  <li>Course PowerPoints Java-topic1 … topic5</li>
+  <li>Java Swing docs, PDFBox examples, Token Plan docs</li>
+  <li>Algorithm Design report for print layout ideas</li>
+</ul>
+<h3>Analysis</h3>
+<p>Works for real PDFs, quiz/cards/schedule/Ask, and save/load. Limits: needs internet + key; long PDFs are cut; parser needs the AI tag format. Trade-off: API content is better than hard-coded samples, but not fully offline.</p>
+</section>
+<section class="sheet page-start" id="s13"><p class="kicker">Part 13</p><h2>Conclusion</h2>
+<p>I chose Study Buddy myself as my final project. It turns a PDF or image into a summary, quiz, flashcards, and a week plan in a Swing dashboard, and saves subjects under <code>data/</code>. I used classes, methods, arrays, and loops from the Java course, plus PDFBox and a chat API for the harder parts.</p>
+<p>Real run: qwen3.8-flash, subjects Java and Assembly Language, profile 1 quiz / 8 card flips / best 20%.</p>
+</section>
+<section class="sheet page-start" id="src"><p class="kicker">Source</p><h2>Important code — not the whole project</h2>
+<p class="deck">Below are only the parts that matter for how Study Buddy works. Each block has a short note first. The full project folder has the rest of the UI code.</p>
+<h3>1. Course — one subject</h3>
+<p>A subject has a name, category, and a list of documents. <code>docCount()</code> is used on the overview cards.</p>
+<div class="window code"><div class="bar"><span class="dots"><i></i><i></i><i></i></span>Course.java</div><pre><span class="ln"></span><span class="kw">class</span> Course {
+<span class="ln"></span>    <span class="kw">String</span> id;
+<span class="ln"></span>    <span class="kw">String</span> name;
+<span class="ln"></span>    <span class="kw">String</span> category;
+<span class="ln"></span>    ArrayList&lt;StudyDoc&gt; docs;
+<span class="ln"></span>
+<span class="ln"></span>    <span class="kw">public</span> Course(<span class="kw">String</span> id, <span class="kw">String</span> name, <span class="kw">String</span> category) {
+<span class="ln"></span>        <span class="kw">this</span>.id = id;
+<span class="ln"></span>        <span class="kw">this</span>.name = name;
+<span class="ln"></span>        <span class="kw">this</span>.category = category;
+<span class="ln"></span>        <span class="kw">this</span>.docs = <span class="kw">new</span> ArrayList&lt;StudyDoc&gt;();
+<span class="ln"></span>    }
+<span class="ln"></span>
+<span class="ln"></span>    <span class="kw">public</span> <span class="kw">int</span> docCount() {
+<span class="ln"></span>        <span class="kw">return</span> docs.size();
+<span class="ln"></span>    }
+<span class="ln"></span>}</pre></div>
+<h3>2. StudyPack — what the AI builds</h3>
+<p>After import, one pack holds the summary text plus the quiz, cards, and plan arrays the UI reads.</p>
+<div class="window code"><div class="bar"><span class="dots"><i></i><i></i><i></i></span>StudyPack.java</div><pre><span class="ln"></span><span class="kw">class</span> StudyPack {
+<span class="ln"></span>    <span class="kw">String</span> sourceName;
+<span class="ln"></span>    <span class="kw">String</span> summary;
+<span class="ln"></span>    QuizQuestion[] quiz;
+<span class="ln"></span>    FlashCard[] cards;
+<span class="ln"></span>    PlanItem[] plan;
+<span class="ln"></span>
+<span class="ln"></span>    <span class="kw">public</span> StudyPack(<span class="kw">String</span> sourceName, <span class="kw">String</span> summary, QuizQuestion[] quiz,
+<span class="ln"></span>                     FlashCard[] cards, PlanItem[] plan) {
+<span class="ln"></span>        <span class="kw">this</span>.sourceName = sourceName;
+<span class="ln"></span>        <span class="kw">this</span>.summary = summary;
+<span class="ln"></span>        <span class="kw">this</span>.quiz = quiz;
+<span class="ln"></span>        <span class="kw">this</span>.cards = cards;
+<span class="ln"></span>        <span class="kw">this</span>.plan = plan;
+<span class="ln"></span>    }
+<span class="ln"></span>}</pre></div></section>
+<section class="sheet page-start" id="src2"><p class="kicker">Source</p><h2>Save scores + read a PDF</h2>
+<h3>3. recordQuiz — update stats after a finished quiz</h3>
+<p>Adds one attempt, keeps the best score, updates the profile percent, then saves.</p>
+<div class="window code"><div class="bar"><span class="dots"><i></i><i></i><i></i></span>LibraryStore.recordQuiz</div><pre><span class="ln"></span><span class="kw">public</span> <span class="kw">void</span> recordQuiz(StudyDoc doc, <span class="kw">int</span> score, <span class="kw">int</span> total) {
+<span class="ln"></span>    doc.quizAttempts = doc.quizAttempts + 1;
+<span class="ln"></span>    <span class="kw">if</span> (score &gt; doc.bestQuizScore) {
+<span class="ln"></span>        doc.bestQuizScore = score;
+<span class="ln"></span>    }
+<span class="ln"></span>    profile.quizzesTaken = profile.quizzesTaken + 1;
+<span class="ln"></span>    <span class="kw">int</span> percent = 0;
+<span class="ln"></span>    <span class="kw">if</span> (total &gt; 0) {
+<span class="ln"></span>        percent = (score * 100) / total;
+<span class="ln"></span>    }
+<span class="ln"></span>    <span class="kw">if</span> (percent &gt; profile.bestPercent) {
+<span class="ln"></span>        profile.bestPercent = percent;
+<span class="ln"></span>    }
+<span class="ln"></span>    refreshProfileTotals();
+<span class="ln"></span>    saveAll();
+<span class="ln"></span>}</pre></div>
+<h3>4. readPdfText — get text from a PDF</h3>
+<p>Uses PDFBox. Long files are cut so the API request stays smaller.</p>
+<div class="window code"><div class="bar"><span class="dots"><i></i><i></i><i></i></span>FileImport.readPdfText</div><pre><span class="ln"></span><span class="kw">public</span> <span class="kw">static</span> <span class="kw">String</span> readPdfText(File file) <span class="kw">throws</span> IOException {
+<span class="ln"></span>    PDDocument doc = Loader.loadPDF(file);
+<span class="ln"></span>    <span class="kw">try</span> {
+<span class="ln"></span>        PDFTextStripper stripper = <span class="kw">new</span> PDFTextStripper();
+<span class="ln"></span>        <span class="kw">String</span> text = stripper.getText(doc);
+<span class="ln"></span>        <span class="kw">if</span> (text == <span class="kw">null</span>) {
+<span class="ln"></span>            text = <span class="st">""</span>;
+<span class="ln"></span>        }
+<span class="ln"></span>        text = text.trim();
+<span class="ln"></span>        <span class="kw">if</span> (text.length() &gt; 12000) {
+<span class="ln"></span>            text = text.substring(0, 12000)
+<span class="ln"></span>                + <span class="st">"\n\n[Text cut here because the file was long.]"</span>;
+<span class="ln"></span>        }
+<span class="ln"></span>        <span class="kw">return</span> text;
+<span class="ln"></span>    } <span class="kw">finally</span> {
+<span class="ln"></span>        doc.close();
+<span class="ln"></span>    }
+<span class="ln"></span>}</pre></div></section>
+<section class="sheet page-start" id="src3"><p class="kicker">Source</p><h2>Build pack + parse quiz lines</h2>
+<h3>5. buildFromText — ask the AI for a study pack</h3>
+<p>Sends the course text with the study prompt, then turns the reply into a StudyPack.</p>
+<div class="window code"><div class="bar"><span class="dots"><i></i><i></i><i></i></span>AiService.buildFromText</div><pre><span class="ln"></span><span class="kw">public</span> StudyPack buildFromText(<span class="kw">String</span> sourceName, <span class="kw">String</span> text) <span class="kw">throws</span> Exception {
+<span class="ln"></span>    requireApi();
+<span class="ln"></span>    <span class="kw">String</span> prompt = studyPrompt() + <span class="st">"\n\nCOURSE TEXT:\n"</span> + text;
+<span class="ln"></span>    <span class="kw">String</span> reply = chatText(prompt);
+<span class="ln"></span>    <span class="kw">return</span> parsePack(sourceName, reply);
+<span class="ln"></span>}</pre></div>
+<h3>6. parseQuiz — turn Q:/A:/W: lines into objects</h3>
+<p>Loops through the AI reply. Each question needs a Q line, an A line, and wrong W lines.</p>
+<div class="window code"><div class="bar"><span class="dots"><i></i><i></i><i></i></span>AiService.parseQuiz</div><pre><span class="ln"></span><span class="kw">private</span> QuizQuestion[] parseQuiz(<span class="kw">String</span> block) {
+<span class="ln"></span>    ArrayList&lt;QuizQuestion&gt; list = <span class="kw">new</span> ArrayList&lt;QuizQuestion&gt;();
+<span class="ln"></span>    <span class="kw">String</span>[] lines = block.split(<span class="st">"\n"</span>);
+<span class="ln"></span>    <span class="kw">String</span> q = <span class="st">""</span>;
+<span class="ln"></span>    <span class="kw">String</span> a = <span class="st">""</span>;
+<span class="ln"></span>    ArrayList&lt;<span class="kw">String</span>&gt; wrongs = <span class="kw">new</span> ArrayList&lt;<span class="kw">String</span>&gt;();
+<span class="ln"></span>
+<span class="ln"></span>    <span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; lines.length; i++) {
+<span class="ln"></span>        <span class="kw">String</span> line = lines[i].trim();
+<span class="ln"></span>        <span class="kw">if</span> (line.startsWith(<span class="st">"Q:"</span>)) {
+<span class="ln"></span>            <span class="kw">if</span> (q.length() &gt; 0 &amp;&amp; a.length() &gt; 0) {
+<span class="ln"></span>                list.add(<span class="kw">new</span> QuizQuestion(q, a, wrongs.toArray(<span class="kw">new</span> <span class="kw">String</span>[0])));
+<span class="ln"></span>            }
+<span class="ln"></span>            q = line.substring(2).trim();
+<span class="ln"></span>            a = <span class="st">""</span>;
+<span class="ln"></span>            wrongs = <span class="kw">new</span> ArrayList&lt;<span class="kw">String</span>&gt;();
+<span class="ln"></span>        } <span class="kw">else</span> <span class="kw">if</span> (line.startsWith(<span class="st">"A:"</span>)) {
+<span class="ln"></span>            a = line.substring(2).trim();
+<span class="ln"></span>        } <span class="kw">else</span> <span class="kw">if</span> (line.startsWith(<span class="st">"W:"</span>)) {
+<span class="ln"></span>            wrongs.add(line.substring(2).trim());
+<span class="ln"></span>        }
+<span class="ln"></span>    }
+<span class="ln"></span>    <span class="kw">if</span> (q.length() &gt; 0 &amp;&amp; a.length() &gt; 0) {
+<span class="ln"></span>        list.add(<span class="kw">new</span> QuizQuestion(q, a, wrongs.toArray(<span class="kw">new</span> <span class="kw">String</span>[0])));
+<span class="ln"></span>    }
+<span class="ln"></span>    <span class="kw">return</span> list.toArray(<span class="kw">new</span> QuizQuestion[0]);
+<span class="ln"></span>}</pre></div></section>
+<section class="sheet page-start" id="src4"><p class="kicker">Source</p><h2>Quiz UI + page switch</h2>
+<h3>7. checkAnswer — mark correct / wrong and maybe finish</h3>
+<p>Locks the buttons, paints green/red, adds to the score. On the last question it calls <code>finishQuizIfNeeded</code> so the profile updates.</p>
+<div class="window code"><div class="bar"><span class="dots"><i></i><i></i><i></i></span>StudyBuddyApp.checkAnswer</div><pre><span class="ln"></span><span class="kw">private</span> <span class="kw">void</span> checkAnswer(<span class="kw">int</span> index) {
+<span class="ln"></span>    <span class="kw">if</span> (selectedDoc == <span class="kw">null</span> || answered
+<span class="ln"></span>            || quizIndex &gt;= selectedDoc.pack.quiz.length) {
+<span class="ln"></span>        <span class="kw">return</span>;
+<span class="ln"></span>    }
+<span class="ln"></span>    answered = <span class="kw">true</span>;
+<span class="ln"></span>    <span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; 4; i++) {
+<span class="ln"></span>        answerButtons[i].setEnabled(<span class="kw">false</span>);
+<span class="ln"></span>    }
+<span class="ln"></span>    <span class="kw">boolean</span> ok = shuffledAnswers[index].equals(currentCorrect);
+<span class="ln"></span><span class="cm">    // green = correct, red = wrong pick, grey = other options</span>
+<span class="ln"></span>    <span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; 4; i++) {
+<span class="ln"></span>        <span class="kw">if</span> (shuffledAnswers[i].equals(currentCorrect)) {
+<span class="ln"></span>            styleQuizOptionCorrect(answerButtons[i]);
+<span class="ln"></span>        } <span class="kw">else</span> <span class="kw">if</span> (i == index) {
+<span class="ln"></span>            styleQuizOptionWrong(answerButtons[i]);
+<span class="ln"></span>        } <span class="kw">else</span> {
+<span class="ln"></span>            styleQuizOptionMuted(answerButtons[i]);
+<span class="ln"></span>        }
+<span class="ln"></span>    }
+<span class="ln"></span>    <span class="kw">if</span> (ok) {
+<span class="ln"></span>        quizScore = quizScore + 1;
+<span class="ln"></span>        quizFeedback.setText(<span class="st">"Correct."</span>);
+<span class="ln"></span>    } <span class="kw">else</span> {
+<span class="ln"></span>        quizFeedback.setText(<span class="st">"Correct answer is highlighted in green."</span>);
+<span class="ln"></span>    }
+<span class="ln"></span>    <span class="kw">if</span> (quizIndex &gt;= selectedDoc.pack.quiz.length - 1) {
+<span class="ln"></span>        finishQuizIfNeeded();
+<span class="ln"></span>    }
+<span class="ln"></span>}</pre></div>
+<h3>8. showPage — switch the centre panel</h3>
+<p>Sidebar buttons call this. Quiz/cards/summary need a document open first.</p>
+<div class="window code"><div class="bar"><span class="dots"><i></i><i></i><i></i></span>StudyBuddyApp.showPage (short)</div><pre><span class="ln"></span><span class="kw">private</span> <span class="kw">void</span> showPage(<span class="kw">String</span> id) {
+<span class="ln"></span>    <span class="kw">if</span> (id.equals(<span class="st">"overview"</span>)) {
+<span class="ln"></span>        refreshOverview();
+<span class="ln"></span>        pages.show(pageHost, <span class="st">"overview"</span>);
+<span class="ln"></span>        setNavActive(<span class="st">"overview"</span>);
+<span class="ln"></span>        <span class="kw">return</span>;
+<span class="ln"></span>    }
+<span class="ln"></span>    <span class="kw">if</span> (id.equals(<span class="st">"plan"</span>)) {
+<span class="ln"></span>        refreshPlanCalendar();
+<span class="ln"></span>        pages.show(pageHost, <span class="st">"plan"</span>);
+<span class="ln"></span>        setNavActive(<span class="st">"plan"</span>);
+<span class="ln"></span>        <span class="kw">return</span>;
+<span class="ln"></span>    }
+<span class="ln"></span>    <span class="kw">if</span> (id.equals(<span class="st">"quiz"</span>) || id.equals(<span class="st">"cards"</span>) || id.equals(<span class="st">"summary"</span>)) {
+<span class="ln"></span>        <span class="kw">if</span> (selectedDoc == <span class="kw">null</span>) {
+<span class="ln"></span><span class="cm">            // tell the user to open a document first</span>
+<span class="ln"></span>            showPage(<span class="st">"overview"</span>);
+<span class="ln"></span>            <span class="kw">return</span>;
+<span class="ln"></span>        }
+<span class="ln"></span>        loadDocIntoViews();
+<span class="ln"></span>        pages.show(pageHost, id);
+<span class="ln"></span>        setNavActive(id.equals(<span class="st">"summary"</span>) ? <span class="st">"docs"</span> : id);
+<span class="ln"></span>        <span class="kw">return</span>;
+<span class="ln"></span>    }
+<span class="ln"></span><span class="cm">    // course / docs / ...</span>
+<span class="ln"></span>    pages.show(pageHost, id);
+<span class="ln"></span>    setNavActive(id);
+<span class="ln"></span>}</pre></div>
+<p class="note">Full sources stay in the StudyBuddy folder for submission. This appendix only shows the functions that explain the main behaviour.</p>
+</section>
+</main></body></html>

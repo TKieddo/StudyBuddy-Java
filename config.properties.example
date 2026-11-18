@@ -1,0 +1,18 @@
+# Copy to config.properties and paste your Token Plan API key (sk-sp-...).
+# Do not share config.properties.
+
+api.key=PASTE_YOUR_KEY_HERE
+
+api.baseUrl=https://token-plan.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
+
+# Models that worked on Token Plan (tested):
+#   qwen4-max          ← best quality (recommended)
+#   qwen4-max-preview
+#   qwen3.8-max
+#   qwen3.8-flash      ← faster / cheaper
+#   qwen3.7-max
+#   qwen3.7-plus
+#   qwen3.6-flash
+# Default to flash for speed; switch to qwen4-max for higher quality
+api.model=qwen3.8-flash
+api.visionModel=qwen3.8-flash

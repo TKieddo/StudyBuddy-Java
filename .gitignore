@@ -1,0 +1,7 @@
+config.properties
+*.class
+.DS_Store
+data/
+report-screenshots/fresh/
+report-screenshots/07-desktop.png
+report-screenshots/08-overview.png
